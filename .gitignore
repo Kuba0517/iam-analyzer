@@ -1,0 +1,12 @@
+# Go
+backend/bin/
+
+# Node
+frontend/node_modules/
+frontend/.next/
+
+# IDE
+.idea/
+
+# Env
+.env
