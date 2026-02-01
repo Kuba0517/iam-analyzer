@@ -91,10 +91,14 @@ func Apply(w http.ResponseWriter, r *http.Request) {
 	score := scorer.Score(simplified)
 	findings := analyzer.Analyze(simplified)
 
+	g := graph.Build(simplified)
+	graphData := graph.Serialize(g, simplified)
+
 	resp := model.ApplyResponse{
 		Simplified: simplified,
 		Score:      score,
 		Findings:   findings,
+		Graph:      &graphData,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

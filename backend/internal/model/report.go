@@ -72,4 +72,5 @@ type ApplyResponse struct {
 	Simplified *Policy     `json:"simplified"`
 	Score      ScoreResult `json:"score"`
 	Findings   []Finding   `json:"findings"`
+	Graph      *GraphData  `json:"graph,omitempty"`
 }
