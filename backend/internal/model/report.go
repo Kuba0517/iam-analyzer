@@ -36,12 +36,31 @@ type Patch struct {
 	Apply       func(*Policy) *Policy `json:"-"`
 }
 
+type GraphNode struct {
+	Index  int    `json:"index"`
+	Label  string `json:"label"`
+	Effect string `json:"effect"`
+}
+
+type GraphEdge struct {
+	From  int    `json:"from"`
+	To    int    `json:"to"`
+	Type  string `json:"type"`
+	Label string `json:"label"`
+}
+
+type GraphData struct {
+	Nodes []GraphNode `json:"nodes"`
+	Edges []GraphEdge `json:"edges"`
+}
+
 type AnalyzeResponse struct {
 	Original    *Policy     `json:"original"`
 	Normalized  *Policy     `json:"normalized"`
 	Score       ScoreResult `json:"score"`
 	Findings    []Finding   `json:"findings"`
 	Suggestions []Patch     `json:"suggestions"`
+	Graph       *GraphData  `json:"graph,omitempty"`
 }
 
 type ApplyRequest struct {
