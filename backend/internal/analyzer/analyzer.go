@@ -3,24 +3,19 @@ package analyzer
 import (
 	"sort"
 
+	"github.com/Kuba0517/iam-analyzer/internal/graph"
 	"github.com/Kuba0517/iam-analyzer/internal/model"
 )
 
-type Detector func(p *model.Policy) []model.Finding
-
 func Analyze(p *model.Policy) []model.Finding {
-	detectors := []Detector{
-		DetectRedundant,
-		DetectMergeCandidates,
-		DetectWildcardOveruse,
-		DetectNegativeElements,
-		DetectDenyAllowOverlap,
-	}
+	g := graph.Build(p)
 
 	var findings []model.Finding
-	for _, d := range detectors {
-		findings = append(findings, d(p)...)
-	}
+	findings = append(findings, detectRedundantFromGraph(g)...)
+	findings = append(findings, detectMergeCandidatesFromGraph(g)...)
+	findings = append(findings, DetectWildcardOveruse(p)...)
+	findings = append(findings, DetectNegativeElements(p)...)
+	findings = append(findings, detectDenyAllowOverlapFromGraph(g, p)...)
 
 	sort.SliceStable(findings, func(i, j int) bool {
 		return severityRank(findings[i].Severity) > severityRank(findings[j].Severity)
