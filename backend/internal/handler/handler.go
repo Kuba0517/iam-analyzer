@@ -7,6 +7,7 @@ import (
 
 	"github.com/Kuba0517/iam-analyzer/internal/analyzer"
 	"github.com/Kuba0517/iam-analyzer/internal/diff"
+	"github.com/Kuba0517/iam-analyzer/internal/graph"
 	"github.com/Kuba0517/iam-analyzer/internal/model"
 	"github.com/Kuba0517/iam-analyzer/internal/normalizer"
 	"github.com/Kuba0517/iam-analyzer/internal/parser"
@@ -47,12 +48,16 @@ func Analyze(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	g := graph.Build(normalized)
+	graphData := graph.Serialize(g, normalized)
+
 	resp := model.AnalyzeResponse{
 		Original:    policy,
 		Normalized:  normalized,
 		Score:       score,
 		Findings:    findings,
 		Suggestions: suggestions,
+		Graph:       &graphData,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
