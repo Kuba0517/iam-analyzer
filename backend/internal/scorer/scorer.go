@@ -9,7 +9,7 @@ import (
 func Score(p *model.Policy) model.ScoreResult {
 	factors := []model.ScoreBreakdown{
 		statementCount(p),
-		wildcardResourcePct(p),
+		wildcardActionPct(p),
 		wildcardResourcePct(p),
 		negativeStatements(p),
 		denyAllowOverlap(p),
